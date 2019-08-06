@@ -1751,9 +1751,9 @@ $(VIMTARGET): auto/config.mk objects $(OBJ) version.c version.h
 		MAKE="$(MAKE)" LINK_AS_NEEDED=$(LINK_AS_NEEDED) \
 		sh $(srcdir)/link.sh
 
-libvim.a: $(OBJ) libvim.c
+$(LIBNAME): $(OBJ) libvim.c
 	$(CCC) version.c -o objects/version.o
-	$(AR) rcs libvim.a $(OBJ)
+	$(CC) -shared -dynamiclib -o $(LIBNAME) $(OBJ) -fPIC $(LIBFLAGS)
 
 xxd/xxd$(EXEEXT): xxd/xxd.c
 	cd xxd; CC="$(CC)" CFLAGS="$(CPPFLAGS) $(CFLAGS)" LDFLAGS="$(LDFLAGS)" \
@@ -1978,14 +1978,14 @@ apitest/%.test.exe: apitest/%.c libvim.a
 installapitest:  copy-apitest-collateral $(TEST_EXE)
 	$(INSTALL_PROG) build/run-tests.sh $(DEST_BIN)
 
-installlibvim: libvim.a $(DEST_BIN) $(DEST_LIB)
+installlibvim: $(LIBNAME) $(DEST_BIN) $(DEST_LIB)
 	mkdir -p $(DEST_INCLUDE)
 	$(INSTALL_PROG) *.h $(DEST_INCLUDE)
 	mkdir -p $(DEST_INCLUDE)/proto
 	$(INSTALL_PROG) proto/*.pro $(DEST_INCLUDE)/proto
 	mkdir -p $(DEST_INCLUDE)/auto
 	$(INSTALL_PROG) auto/*.h $(DEST_INCLUDE)/auto
-	$(INSTALL_PROG) libvim.a $(DEST_LIB)
+	$(INSTALL_PROG) $(LIBNAME) $(DEST_LIB)
 
 #
 # Avoid overwriting an existing executable, somebody might be running it and

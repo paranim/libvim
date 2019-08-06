@@ -780,15 +780,18 @@ $(TARGET): $(OUTDIR) $(OBJ)
 	$(LINK) $(CFLAGS) $(LFLAGS) -o $@ $(OBJ) $(LIB) -lole32 -luuid $(LUA_LIB) $(MZSCHEME_LIBDIR) $(MZSCHEME_LIB) $(PYTHONLIB) $(PYTHON3LIB) $(RUBYLIB)
 endif
 
+libvim.dll: $(OUTDIR) $(OBJ)
+	$(CC) -shared -o libvim.dll $(OBJ) -fPIC -lstdc++ -lole32 -lws2_32 -lnetapi32 -lversion -lcomctl32 -luuid -lgdi32
+
 libvim.a: $(OUTDIR) $(OBJ)
 	$(AR) rcs libvim.a $(OBJ)
 
-installlibvim: libvim.a
+installlibvim: libvim.dll
 	mkdir -p $(DEST_INCLUDE)
 	$(INSTALL_PROG) *.h $(DEST_INCLUDE)
 	mkdir -p $(DEST_INCLUDE)/proto
 	$(INSTALL_PROG) proto/*.pro $(DEST_INCLUDE)/proto
-	$(INSTALL_PROG) libvim.a $(DEST_LIB)
+	$(INSTALL_PROG) libvim.dll $(DEST_LIB)
 
 TEST_SRC = $(wildcard apitest/*.c)
 TEST_COLLATERAL = $(wildcard apitest/collateral/*.*)
