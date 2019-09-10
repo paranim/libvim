@@ -1,7 +1,7 @@
 unameOut="$(uname -s)"
 
 case "${unameOut}" in
-    Linux*) CFLAGS="CFLAGS=-fPIC" LIBNAME="libvim.so";;
+    Linux*) CFLAGS="CFLAGS=-fPIC" LIBNAME="libvim.so" LIBFLAGS="-lncurses";;
     *)      CFLAGS="" LIBNAME="libvim.dylib" LIBFLAGS="-liconv -lncurses -lobjc -framework CoreFoundation -framework AppKit";;
 esac
 
