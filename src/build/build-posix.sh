@@ -6,4 +6,4 @@ case "${unameOut}" in
 esac
 
 ./configure --disable-selinux ${CFLAGS}
-make installlibvim DESTDIR=$cur__install LIBNAME=${LIBNAME} LIBFLAGS="${LIBFLAGS}"
+make ${LIBNAME} DESTDIR=$cur__install LIBNAME=${LIBNAME} LIBFLAGS="${LIBFLAGS}"

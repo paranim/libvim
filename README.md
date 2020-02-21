@@ -55,6 +55,13 @@ cd src
 build/build-windows.sh
 ```
 
+### Linux or Mac OS
+
+```
+cd src
+build/build-posix.sh
+```
+
 ## Supporting
 
 If `libvim` is interesting to you, and you'd like to support development, consider the following:
