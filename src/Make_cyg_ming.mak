@@ -781,7 +781,7 @@ $(TARGET): $(OUTDIR) $(OBJ)
 endif
 
 libvim.dll: $(OUTDIR) $(OBJ)
-	$(CC) -shared -o libvim.dll $(OBJ) -fPIC -lstdc++ -lole32 -lws2_32 -lnetapi32 -lversion -lcomctl32 -luuid -lgdi32
+	$(CC) -shared -o libvim.dll $(OBJ) -fPIC -lole32 -lws2_32 -lnetapi32 -lversion -lcomctl32 -luuid -lgdi32
 
 libvim.a: $(OUTDIR) $(OBJ)
 	$(AR) rcs libvim.a $(OBJ)
