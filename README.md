@@ -45,70 +45,15 @@ This library is in active development and we currently make no guarantees about 
 
 ## Compiling ##
 
-### Install [esy](https://esy.sh/)
+### Windows
 
-`esy` is like `npm` for native code. If you don't have it already, install it by running:
+Install WSL (Windows Subsystem for Linux), and from there, do:
+
 ```
-npm install -g esy@0.5.7
+sudo apt install gcc-mingw-w64-x86-64
+cd src
+build/build-windows.sh
 ```
-
-### Get sources
-
-- `git clone https://github.com/onivim/libvim`
-- `cd src`
-
-### Installing dependencies
-
-- `esy install`
-- `esy '@test' install`
-
-### Building
-
-- `esy build`
-
-### Running tests
-
-- `esy '@test' build`
-
-## Development
-
-The `esy` workflow works great for one-off builds, but will rebuild the world every time, so during development it's better to have an incremental workflow.
-
-### Building & running tests incrementally
-
-- `cd src` 
-- `make apitest/autoindent.test.exe`
-- `cd apitest`
-- `./autoindent.test.exe`
-
-### Testing changes against Onivim 2
-
-You can test a locally-built `libvim` against a locally-built Onivim 2 by adding a resolution in the Onivim 2 `package.json`, like:
-```json
-"resolutions": {
-	...
-	"libvim": "link:../libvim/src"
-}
-```
-Just make sure it points to the `libvim/src` folder.
-
-> NOTE: We've seen issues with this workflow where the binaries can be out-of-date in Onivim 2, so we recommend running `rm -rf _esy && esy i` after each change to rebuild the dependency.
-
-## FAQ
-
-### Why is `libvim` based on Vim and not Neovim?
-
-I'm a huge fan of the work the Neovim team is doing (and the team has been incredibly supportive of the Onivim project). Ideally, we would've stuck with Neovim or implemented `libvim` based on `libnvim`. In fact, the first time I tried to build this 'minimal abstraction' - I tried to base it off Neovim's `libnvim`. I timeboxed the investigation to 2 days, and ran into some serious hurdles - our build environment is a bit challenging on Windows (it's based on Cygwin + MingW cross-compiler toolchain) - I encountered several issues getting Neovim + deps to build in that environment. Based off that spike, I estimated it would take ~3-4 weeks to get it working in that toolchain.
-
-Note that this is not a Neovim issue - the dependency usage and leveraging of `CMake` are good decisions - it's a consequence of our OCaml build system. The Cygwin + MingW cross-compiler toolchain isn't well handled by all dependencies (being a weird hybrid of Win32 and Unix, it's often the case where #ifdefs are wrong, incorrect dependencies are pulled in, and it can be a huge time sink working through these issues).
-
-Vim, in contrast, was able to compile in that environment easily (NOTE: If anyone is interested in building a cross-platform, `esy`-enabled Neovim package - we can revisit this!). I'm also interested in WebAssembly builds, for porting the Onivim v1 tutorials to the web, in which this C-abstracted library compiled to WebAssembly would be a perfect fit.
-
-Beyond the build issues, both Neovim and Vim would need refactoring to provide that synchronous, functional API:
-- Neovim uses an event loop at its core, which would need to be short-circuited or removed to provide that API
-- Vim uses blocking input, which would need to be inverted to support the functional API
-
-The motivation of all this work was to remove the RPC layer from Onivim v2 to reduce complexity and failure modes - at the end, this was purely a constraint-based technical decision. If we can get a similar API, buildable via `esy` cross-platform, with `nvim` - I'd be happy to use that :)
 
 ## Supporting
 
